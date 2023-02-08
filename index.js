@@ -1,12 +1,12 @@
 require('dotenv').config()
 require('colors')
-const { MongoClient, ServerApiVersion } = require('mongodb')
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb')
 const express = require('express')
 const app = express()
 const cors = require('cors')
 const port = process.env.PORT || 5000
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.s9x13go.mongodb.net/?retryWrites=true&w=majority`
+const uri = `mongodb+srv://${ process.env.DB_USER }:${ process.env.DB_PASSWORD }@cluster0.s9x13go.mongodb.net/?retryWrites=true&w=majority`
 const client = new MongoClient(uri, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
@@ -28,8 +28,9 @@ const dbConnect = async () => {
 dbConnect()
 
 // Database : collections
-const blogCollection = client.db('traveler').collection('blogs')
-const destinationCollection = client.db('traveler').collection('destinations')
+const blogCollection = client.db('traveler').collection('blogs');
+const destinationCollection = client.db('traveler').collection('destinations');
+const destinationDetails = client.db('traveler').collection('destinationDetails');
 
 // Get: default end point
 app.get('/', (req, res) => {
@@ -70,7 +71,28 @@ app.get('/destinations', async (req, res) => {
 	}
 })
 
+app.get('/destination/:id', async (req, res) => {
+	try {
+		const id = Number(req.params.id);
+		const query = { placeId: id };
+		const destination = await destinationDetails.findOne(query);
+		res.send({
+			success: true,
+			destination: destination
+		})
+
+	} catch (error) {
+		res.send({
+			success: false,
+			error: error.message,
+		})
+	}
+})
+
+
+
+
 // listen app
 app.listen(port, () =>
-	console.log(`Server Running on Port ${port}`.random.italic),
+	console.log(`Server Running on Port ${ port }`.random.italic),
 )
