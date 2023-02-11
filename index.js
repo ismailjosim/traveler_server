@@ -31,6 +31,7 @@ dbConnect()
 const blogCollection = client.db('traveler').collection('blogs');
 const destinationCollection = client.db('traveler').collection('destinations');
 const destinationDetails = client.db('traveler').collection('destinationDetails');
+const packageCollection = client.db('traveler').collection('packages');
 
 // Get: default end point
 app.get('/', (req, res) => {
@@ -43,12 +44,12 @@ app.get('/blogs', async (req, res) => {
 		const query = {}
 		const blogs = await blogCollection.find(query).toArray()
 		res.send({
-			success: true,
+			status: true,
 			blogs: blogs,
 		})
 	} catch (error) {
 		res.send({
-			success: false,
+			status: false,
 			error: error.message,
 		})
 	}
@@ -60,37 +61,53 @@ app.get('/destinations', async (req, res) => {
 		const query = {}
 		const destinations = await destinationCollection.find(query).toArray()
 		res.send({
-			success: true,
+			status: true,
 			destinations: destinations,
 		})
 	} catch (error) {
 		res.send({
-			success: false,
+			status: false,
 			error: error.message,
 		})
 	}
 })
-
+// Get: single destination details
 app.get('/destination/:id', async (req, res) => {
 	try {
 		const id = Number(req.params.id);
 		const query = { placeId: id };
 		const destination = await destinationDetails.findOne(query);
 		res.send({
-			success: true,
+			status: true,
 			destination: destination
 		})
 
 	} catch (error) {
 		res.send({
-			success: false,
+			status: false,
 			error: error.message,
 		})
 	}
 })
 
 
+// GET: All Packages
+app.get('/packages', async (req, res) => {
+	try {
+		const query = {};
+		const packages = await packageCollection.find(query).toArray();
+		res.send({
+			status: true,
+			packages: packages
+		})
 
+	} catch (error) {
+		res.send({
+			status: false,
+			error: error.message,
+		})
+	}
+})
 
 // listen app
 app.listen(port, () =>
