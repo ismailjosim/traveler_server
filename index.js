@@ -32,6 +32,7 @@ const blogCollection = client.db('traveler').collection('blogs');
 const destinationCollection = client.db('traveler').collection('destinations');
 const destinationDetails = client.db('traveler').collection('destinationDetails');
 const packageCollection = client.db('traveler').collection('packages');
+const packageDetails = client.db('traveler').collection('packageDetails');
 
 // Get: default end point
 app.get('/', (req, res) => {
@@ -108,6 +109,26 @@ app.get('/packages', async (req, res) => {
 		})
 	}
 })
+
+// GET: single Package Details Using ID
+app.get('/package/:id', async (req, res) => {
+	try {
+		const id = req.params.id;
+		const query = { packageId: id };
+		const package = await packageDetails.findOne(query);
+		res.send({
+			status: true,
+			package: package
+		})
+
+	} catch (error) {
+		res.send({
+			status: false,
+			error: error.message,
+		})
+	}
+})
+
 
 // listen app
 app.listen(port, () =>
