@@ -115,10 +115,10 @@ app.get('/package/:id', async (req, res) => {
 	try {
 		const id = req.params.id;
 		const query = { packageId: id };
-		const package = await packageDetails.findOne(query);
+		const detailsPackage = await packageDetails.findOne(query);
 		res.send({
 			status: true,
-			package: package
+			detailsPackage: detailsPackage
 		})
 
 	} catch (error) {
