@@ -7,6 +7,7 @@ const cors = require('cors')
 const port = process.env.PORT || 5000
 
 const uri = `mongodb+srv://${ process.env.DB_USER }:${ process.env.DB_PASSWORD }@cluster0.s9x13go.mongodb.net/?retryWrites=true&w=majority`
+
 const client = new MongoClient(uri, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
@@ -93,7 +94,7 @@ app.get('/destination/:id', async (req, res) => {
 
 
 // GET: All Packages
-app.get('/packages', async (req, res) => {
+app.get('/tourPackages', async (req, res) => {
 	try {
 		const query = {};
 		const packages = await packageCollection.find(query).toArray();
