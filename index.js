@@ -20,7 +20,7 @@ app.use(express.json())
 
 const dbConnect = async () => {
 	try {
-		await client.connect()
+		client.connect()
 		console.log('Travel Database Connected!')
 	} catch (error) {
 		console.log(error.name, error.message)
@@ -31,7 +31,6 @@ dbConnect()
 // Database : collections
 const blogCollection = client.db('traveler').collection('blogs');
 const destinationCollection = client.db('traveler').collection('destinations');
-const destinationDetails = client.db('traveler').collection('destinationDetails');
 const packageCollection = client.db('traveler').collection('packages');
 const packageDetails = client.db('traveler').collection('packageDetails');
 
@@ -74,11 +73,11 @@ app.get('/destinations', async (req, res) => {
 	}
 })
 // Get: single destination details
-app.get('/destination/:id', async (req, res) => {
+app.get('/destinations/:id', async (req, res) => {
 	try {
-		const id = Number(req.params.id);
-		const query = { placeId: id };
-		const destination = await destinationDetails.findOne(query);
+		const id = req.params.id;
+		const query = { _id: new ObjectId(id) };
+		const destination = await destinationCollection.findOne(query);
 		res.send({
 			status: true,
 			destination: destination
